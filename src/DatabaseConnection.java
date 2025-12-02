@@ -7,13 +7,13 @@ public class DatabaseConnection {
     private static DatabaseConnection instance;
     private Connection connection;
 
-    private static final String URL = "jdbc:mysql://localhost:3306/restaurant_db";
-    private static final String USER = "root";
-    private static final String PASSWORD = "password";
+    private static final String URL = "..";
+    private static final String USER = "..";
+    private static final String PASSWORD = "..";
 
     private DatabaseConnection() {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("..");
             this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Database connection established successfully!");
         } catch (ClassNotFoundException | SQLException e) {

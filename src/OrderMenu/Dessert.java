@@ -2,11 +2,11 @@ package OrderMenu;
 
 class Dessert extends MenuItem {
     public Dessert(String name, double price) {
-        super(name, price, "OrderMenu.Dessert");
+        super(name, price, "Dessert");
     }
 
     @Override
     public String getDescription() {
-        return "OrderMenu.Dessert: " + name;
+        return "Dessert: " + name;
     }
 }
