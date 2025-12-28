@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-class Order {
+public class Order {
     private String orderId;
     private List<OrderItem> items;
     private String serviceType; // "dine-in" or "takeaway"

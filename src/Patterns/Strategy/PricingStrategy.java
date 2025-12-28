@@ -1,4 +1,9 @@
 package Patterns.Strategy;
 
-public class PricingStrategy {
+import OrderMenu.*;
+
+// Strategy Interface
+public interface PricingStrategy {
+    double calculatePrice(Order order);
+    String getStrategyName();
 }

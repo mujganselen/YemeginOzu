@@ -2,7 +2,7 @@ package OrderMenu;
 import java.util.List;
 import java.util.ArrayList;
 
-class OrderItem {
+public class OrderItem {
     private MenuItem menuItem;
     private int quantity;
     private List<String> addedIngredients;

@@ -1,4 +1,9 @@
 package Patterns.Observer;
 
-public class OrderObserver {
+import OrderMenu.*;
+
+// Observer Interface
+public interface OrderObserver {
+    void onOrderPlaced(Order order);
+    void onOrderStatusChanged(Order order);
 }
