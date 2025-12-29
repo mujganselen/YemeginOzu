@@ -18,7 +18,6 @@ public class OrderDAO {
         try {
             connection.setAutoCommit(false);
 
-            // Insert order
             try (PreparedStatement pstmt = connection.prepareStatement(orderQuery, Statement.RETURN_GENERATED_KEYS)) {
                 pstmt.setString(1, order.getOrderNumber());
                 pstmt.setString(2, order.getOrderType().name());

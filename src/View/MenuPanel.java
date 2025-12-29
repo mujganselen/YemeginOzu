@@ -44,7 +44,7 @@ public class MenuPanel extends JPanel {
         panel.setBackground(new Color(255, 140, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JButton backButton = new JButton("◀ Kategoriler");
+        JButton backButton = new JButton("◀ Categories");
         backButton.setFont(new Font("Arial", Font.BOLD, 16));
         backButton.setBackground(new Color(255, 165, 0));
         backButton.setForeground(Color.WHITE);
@@ -66,7 +66,7 @@ public class MenuPanel extends JPanel {
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        JButton cartButton = new JButton("🛒 Sepete Git");
+        JButton cartButton = new JButton(" View cart");
         cartButton.setFont(new Font("Arial", Font.BOLD, 18));
         cartButton.setPreferredSize(new Dimension(200, 50));
         cartButton.setBackground(new Color(34, 139, 34));
@@ -135,7 +135,7 @@ public class MenuPanel extends JPanel {
         infoPanel.add(priceLabel);
 
         // Add button
-        JButton addButton = new JButton("+ Sepete Ekle");
+        JButton addButton = new JButton("+ Add to Cart");
         addButton.setFont(new Font("Arial", Font.BOLD, 14));
         addButton.setBackground(new Color(255, 140, 0));
         addButton.setForeground(Color.WHITE);

@@ -44,7 +44,7 @@ public class CartPanel extends JPanel {
         panel.setBackground(new Color(34, 139, 34));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JButton backButton = new JButton("◀ Devam Et");
+        JButton backButton = new JButton("◀ Continue Shopping");
         backButton.setFont(new Font("Arial", Font.BOLD, 16));
         backButton.setBackground(new Color(46, 160, 46));
         backButton.setForeground(Color.WHITE);
@@ -52,7 +52,7 @@ public class CartPanel extends JPanel {
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> mainFrame.backToCategories());
 
-        JLabel titleLabel = new JLabel("🛒 Sepetim");
+        JLabel titleLabel = new JLabel("My Cart");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
         titleLabel.setForeground(Color.WHITE);
 
@@ -70,7 +70,7 @@ public class CartPanel extends JPanel {
         JPanel totalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         totalPanel.setBackground(new Color(245, 245, 245));
 
-        totalLabel = new JLabel("Toplam: 0.00 TL");
+        totalLabel = new JLabel("Total: 0.00 TL");
         totalLabel.setFont(new Font("Arial", Font.BOLD, 28));
         totalLabel.setForeground(new Color(34, 139, 34));
         totalPanel.add(totalLabel);
@@ -79,7 +79,7 @@ public class CartPanel extends JPanel {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
         buttonPanel.setBackground(new Color(245, 245, 245));
 
-        JButton clearButton = new JButton("🗑️ Sepeti Temizle");
+        JButton clearButton = new JButton("Clear Cart");
         clearButton.setFont(new Font("Arial", Font.PLAIN, 16));
         clearButton.setPreferredSize(new Dimension(180, 50));
         clearButton.setBackground(new Color(220, 53, 69));
@@ -88,7 +88,7 @@ public class CartPanel extends JPanel {
         clearButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         clearButton.addActionListener(e -> clearCart());
 
-        checkoutButton = new JButton("✓ Ödemeye Geç");
+        checkoutButton = new JButton("Proceed to Checkout");
         checkoutButton.setFont(new Font("Arial", Font.BOLD, 18));
         checkoutButton.setPreferredSize(new Dimension(200, 50));
         checkoutButton.setBackground(new Color(255, 140, 0));
@@ -135,12 +135,12 @@ public class CartPanel extends JPanel {
         iconLabel.setFont(new Font("Arial", Font.PLAIN, 80));
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel messageLabel = new JLabel("Sepetiniz boş");
+        JLabel messageLabel = new JLabel("Your cart is empty");
         messageLabel.setFont(new Font("Arial", Font.BOLD, 24));
         messageLabel.setForeground(Color.GRAY);
         messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel subLabel = new JLabel("Lütfen menüden ürün ekleyin");
+        JLabel subLabel = new JLabel("Please add items from the menu");
         subLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         subLabel.setForeground(Color.LIGHT_GRAY);
         subLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -176,14 +176,14 @@ public class CartPanel extends JPanel {
         // Customization info
         StringBuilder customText = new StringBuilder();
         if (!item.getAddedIngredients().isEmpty()) {
-            customText.append("Eklenen: ");
+            customText.append("Added: ");
             item.getAddedIngredients().forEach(ing ->
                     customText.append(ing.getName()).append(", "));
             customText.setLength(customText.length() - 2);
         }
         if (!item.getRemovedIngredients().isEmpty()) {
             if (customText.length() > 0) customText.append(" | ");
-            customText.append("Çıkarılan: ");
+            customText.append("Removed: ");
             item.getRemovedIngredients().forEach(ing ->
                     customText.append(ing.getName()).append(", "));
             customText.setLength(customText.length() - 2);
@@ -265,14 +265,14 @@ public class CartPanel extends JPanel {
 
     private void updateTotal() {
         double total = mainFrame.getOrderController().getCartTotal();
-        totalLabel.setText(String.format("Toplam: %.2f TL", total));
+        totalLabel.setText(String.format("Total: %.2f TL", total));
         checkoutButton.setEnabled(total > 0);
     }
 
     private void clearCart() {
         int result = JOptionPane.showConfirmDialog(this,
-                "Sepetteki tüm ürünler silinecek. Emin misiniz?",
-                "Sepeti Temizle",
+                "All items in the cart will be deleted. Are you sure?",
+                "Clear Cart",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE);
 

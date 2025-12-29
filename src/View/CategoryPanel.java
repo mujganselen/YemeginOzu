@@ -42,7 +42,7 @@ public class CategoryPanel extends JPanel {
         panel.setBackground(new Color(255, 140, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel titleLabel = new JLabel("🍴 Kategoriler");
+        JLabel titleLabel = new JLabel("Categories");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
         titleLabel.setForeground(Color.WHITE);
 
@@ -55,7 +55,7 @@ public class CategoryPanel extends JPanel {
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        JButton cartButton = new JButton("🛒 Sepete Git (" +
+        JButton cartButton = new JButton("View Cart (" +
                 mainFrame.getOrderController().getCartItemCount() + ")");
         cartButton.setFont(new Font("Arial", Font.BOLD, 18));
         cartButton.setPreferredSize(new Dimension(200, 50));
@@ -128,10 +128,10 @@ public class CategoryPanel extends JPanel {
     }
 
     private String getCategoryIcon(String categoryName) {
-        if (categoryName.contains("Ana")) return "🍖";
-        if (categoryName.contains("Başlangıç")) return "🥗";
-        if (categoryName.contains("Tatlı")) return "🍰";
-        if (categoryName.contains("İçecek")) return "🥤";
+        if (categoryName.contains("Main")) return "🍖";
+        if (categoryName.contains("Starter")) return "🥗";
+        if (categoryName.contains("Dessert")) return "🍰";
+        if (categoryName.contains("Drink")) return "🥤";
         return "🍽️";
     }
 }

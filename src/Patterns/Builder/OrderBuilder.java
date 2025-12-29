@@ -54,13 +54,14 @@ public class OrderBuilder {
 
     public Order build() {
         if (order == null) {
-            throw new IllegalStateException("Order oluşturulmadı!");
+            throw new IllegalStateException("Order has not been created!");
         }
         if (order.getItems().isEmpty()) {
-            throw new IllegalStateException("Sipariş en az bir ürün içermelidir!");
+            throw new IllegalStateException("The order must contain at least one item!");
         }
         return order;
     }
+
 
     public Order getOrder() {
         return order;

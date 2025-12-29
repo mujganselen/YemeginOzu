@@ -25,12 +25,12 @@ public class WelcomePanel extends JPanel {
         logoLabel.setFont(new Font("Arial", Font.BOLD, 120));
         logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel titleLabel = new JLabel("YemeğinÖzü");
+        JLabel titleLabel = new JLabel("Yemegin Ozu");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 48));
         titleLabel.setForeground(new Color(139, 69, 19));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel subtitleLabel = new JLabel("Lezzet Yolculuğunuz Başlasın");
+        JLabel subtitleLabel = new JLabel("Your Culinary Journey Begins");
         subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         subtitleLabel.setForeground(new Color(105, 105, 105));
         subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -46,8 +46,8 @@ public class WelcomePanel extends JPanel {
         buttonPanel.setBackground(new Color(255, 250, 240));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 150, 50));
 
-        JButton dineInButton = createOrderTypeButton("🪑 Masada Yemek", Order.OrderType.DINE_IN);
-        JButton takeawayButton = createOrderTypeButton("📦 Paket Sipariş", Order.OrderType.TAKEAWAY);
+        JButton dineInButton = createOrderTypeButton("🪑 Dine In", Order.OrderType.DINE_IN);
+        JButton takeawayButton = createOrderTypeButton("📦 Takeaway", Order.OrderType.TAKEAWAY);
 
         buttonPanel.add(dineInButton);
         buttonPanel.add(takeawayButton);

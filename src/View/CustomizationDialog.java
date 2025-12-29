@@ -21,7 +21,7 @@ public class CustomizationDialog extends JDialog {
     public CustomizationDialog(JFrame parent, MenuItem menuItem,
                                RestaurantController restaurantController,
                                OrderController orderController) {
-        super(parent, "Özelleştir: " + menuItem.getName(), true);
+        super(parent, "Customize: " + menuItem.getName(), true);
         this.menuItem = menuItem;
         this.restaurantController = restaurantController;
         this.orderController = orderController;
@@ -49,10 +49,9 @@ public class CustomizationDialog extends JDialog {
         loadIngredients();
 
         JScrollPane scrollPane = new JScrollPane(ingredientsPanel);
-        scrollPane.setBorder(BorderFactory.createTitledBorder("Malzemeler"));
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Ingredients"));
         add(scrollPane, BorderLayout.CENTER);
 
-        // Bottom - actions
         JPanel bottomPanel = createBottomPanel();
         add(bottomPanel, BorderLayout.SOUTH);
     }
@@ -72,7 +71,7 @@ public class CustomizationDialog extends JDialog {
         descLabel.setForeground(Color.GRAY);
         descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel priceLabel = new JLabel(String.format("Taban Fiyat: %.2f TL", menuItem.getBasePrice()));
+        JLabel priceLabel = new JLabel(String.format("Base Price: %.2f TL", menuItem.getBasePrice()));
         priceLabel.setFont(new Font("Arial", Font.BOLD, 16));
         priceLabel.setForeground(new Color(34, 139, 34));
         priceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -90,7 +89,7 @@ public class CustomizationDialog extends JDialog {
         ingredientsPanel.removeAll();
 
         // Default ingredients
-        JLabel defaultLabel = new JLabel("📋 Varsayılan Malzemeler:");
+        JLabel defaultLabel = new JLabel("Default Ingredients:");
         defaultLabel.setFont(new Font("Arial", Font.BOLD, 14));
         defaultLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         ingredientsPanel.add(defaultLabel);
@@ -105,7 +104,7 @@ public class CustomizationDialog extends JDialog {
         ingredientsPanel.add(Box.createVerticalStrut(15));
 
         // Extra ingredients
-        JLabel extraLabel = new JLabel("➕ Ekstra Malzemeler:");
+        JLabel extraLabel = new JLabel("Extra Ingredients:");
         extraLabel.setFont(new Font("Arial", Font.BOLD, 14));
         extraLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         ingredientsPanel.add(extraLabel);
@@ -180,7 +179,7 @@ public class CustomizationDialog extends JDialog {
         JPanel quantityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         quantityPanel.setBackground(Color.WHITE);
 
-        JLabel qtyLabel = new JLabel("Miktar:");
+        JLabel qtyLabel = new JLabel("Quantity:");
         qtyLabel.setFont(new Font("Arial", Font.BOLD, 14));
 
         quantitySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 99, 1));
@@ -195,15 +194,15 @@ public class CustomizationDialog extends JDialog {
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightPanel.setBackground(Color.WHITE);
 
-        totalLabel = new JLabel(String.format("Toplam: %.2f TL", orderItem.getTotalPrice()));
+        totalLabel = new JLabel(String.format("Total: %.2f TL", orderItem.getTotalPrice()));
         totalLabel.setFont(new Font("Arial", Font.BOLD, 18));
         totalLabel.setForeground(new Color(34, 139, 34));
 
-        JButton cancelButton = new JButton("İptal");
+        JButton cancelButton = new JButton("Cancel");
         cancelButton.setFont(new Font("Arial", Font.PLAIN, 14));
         cancelButton.addActionListener(e -> dispose());
 
-        JButton addButton = new JButton("Sepete Ekle");
+        JButton addButton = new JButton("Add to Cart");
         addButton.setFont(new Font("Arial", Font.BOLD, 14));
         addButton.setBackground(new Color(255, 140, 0));
         addButton.setForeground(Color.WHITE);
@@ -224,14 +223,14 @@ public class CustomizationDialog extends JDialog {
     private void updateTotal() {
         int quantity = (Integer) quantitySpinner.getValue();
         orderItem.setQuantity(quantity);
-        totalLabel.setText(String.format("Toplam: %.2f TL", orderItem.getTotalPrice()));
+        totalLabel.setText(String.format("Total: %.2f TL", orderItem.getTotalPrice()));
     }
 
     private void addToCart() {
         orderController.addToCart(orderItem);
         JOptionPane.showMessageDialog(this,
-                "Ürün sepete eklendi!",
-                "Başarılı",
+                "Item added to cart",
+                "Success",
                 JOptionPane.INFORMATION_MESSAGE);
         dispose();
     }

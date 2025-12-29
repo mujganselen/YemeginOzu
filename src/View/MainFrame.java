@@ -31,7 +31,7 @@ public class MainFrame extends JFrame {
     }
 
     private void initUI() {
-        setTitle("YemeğinÖzü - Restoran Sipariş Sistemi");
+        setTitle("Yemegin Ozu - Restaurant Order System");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1200, 800);
         setLocationRelativeTo(null);
@@ -109,8 +109,8 @@ public class MainFrame extends JFrame {
             showPanel("CHECKOUT");
         } else {
             JOptionPane.showMessageDialog(this,
-                    "Sepetiniz boş! Lütfen ürün ekleyin.",
-                    "Uyarı",
+                    "Your cart is empty! Please add items.",
+                    "Warning",
                     JOptionPane.WARNING_MESSAGE);
         }
     }

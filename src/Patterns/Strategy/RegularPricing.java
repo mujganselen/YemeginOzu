@@ -11,6 +11,6 @@ public class RegularPricing implements PricingStrategy {
 
     @Override
     public String getStrategyName() {
-        return "Normal Fiyat";
+        return "Normal Price";
     }
 }

@@ -23,10 +23,10 @@ public class Constants {
     public static final int MEDIUM_BUTTON_WIDTH = 180;
 
     // Messages
-    public static final String APP_TITLE = "YemeğinÖzü - Restoran Sipariş Sistemi";
-    public static final String EMPTY_CART_MESSAGE = "Sepetiniz boş! Lütfen ürün ekleyin.";
-    public static final String ORDER_SUCCESS_MESSAGE = "Siparişiniz başarıyla alındı!";
-    public static final String ORDER_ERROR_MESSAGE = "Sipariş kaydedilemedi. Lütfen tekrar deneyin.";
+    public static final String APP_TITLE = "YemeğinÖzü – Restaurant Ordering System";
+    public static final String EMPTY_CART_MESSAGE = "Your cart is empty! Please add some items.";
+    public static final String ORDER_SUCCESS_MESSAGE = "Your order has been received successfully!";
+    public static final String ORDER_ERROR_MESSAGE = "The order could not be saved. Please try again.";
 
     // Database
     public static final String DB_URL = "jdbc:mysql://localhost:3306/yemeginozu_db";

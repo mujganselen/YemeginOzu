@@ -58,7 +58,6 @@ public class RestaurantController {
         return menuItemDAO.getAllMenuItems();
     }
 
-    // ===== Ingredient Operations =====
     public List<Ingredient> getAllIngredients() {
         return ingredientDAO.getAllIngredients();
     }
@@ -67,7 +66,6 @@ public class RestaurantController {
         return ingredientDAO.getIngredientsForMenuItem(menuItemId);
     }
 
-    // ===== Order Operations =====
     public void startNewOrder(Order.OrderType orderType) {
         this.currentOrderBuilder = new OrderBuilder(orderType);
     }
@@ -92,6 +90,14 @@ public class RestaurantController {
         }
         Order order = currentOrderBuilder.getOrder();
         return pricingStrategy.calculatePrice(order);
+    }
+
+    public void rebuildCurrentOrder(List<OrderItem> cart, Order.OrderType orderType) {
+        this.currentOrderBuilder = new OrderBuilder(orderType);
+
+        for (OrderItem item : cart) {
+            this.currentOrderBuilder.addItem(item);
+        }
     }
 
     public boolean completeOrder() {
@@ -120,7 +126,6 @@ public class RestaurantController {
         currentOrderBuilder = null;
     }
 
-    // ===== Pricing Strategy =====
     public void setPricingStrategy(PricingStrategy strategy) {
         this.pricingStrategy = strategy;
     }
