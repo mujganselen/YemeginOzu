@@ -1,6 +1,8 @@
 package OrderMenu;
 
 
+import Model.OrderItem;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
