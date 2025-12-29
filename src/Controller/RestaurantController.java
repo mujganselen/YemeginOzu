@@ -1,20 +1,33 @@
 package Controller;
 
-import Database.DAO.*;
-import OrderMenu.*;
-import Model.*;
-import Patterns.Observer.*;
-import Patterns.Strategy.*;
+import Database.DAO.CategoryDAO;
+import Database.DAO.IngredientDAO;
+import Database.DAO.MenuItemDAO;
+import Database.DAO.OrderDAO;
+
+import Model.Category;
+import Model.Ingredient;
+import Model.MenuItem;
+import Model.Order;
+import Model.OrderItem;
+
+import Patterns.Builder.OrderBuilder;
+import Patterns.Observer.KitchenObserver;
+import Patterns.Observer.OrderSubject;
+import Patterns.Strategy.PricingStrategy;
+import Patterns.Strategy.RegularPricing;
+
 import java.util.List;
 
 public class RestaurantController {
-    private CategoryDAO categoryDAO;
-    private MenuItemDAO menuItemDAO;
-    private IngredientDAO ingredientDAO;
-    private OrderDAO orderDAO;
 
-    private Order currentOrder;
-    private OrderSubject orderSubject;
+    private final CategoryDAO categoryDAO;
+    private final MenuItemDAO menuItemDAO;
+    private final IngredientDAO ingredientDAO;
+    private final OrderDAO orderDAO;
+
+    private OrderBuilder currentOrderBuilder;
+    private final OrderSubject orderSubject;
     private PricingStrategy pricingStrategy;
 
     public RestaurantController() {
@@ -37,8 +50,8 @@ public class RestaurantController {
     }
 
     // ===== Menu Operations =====
-    public List<MenuItem> getMenuItemsByCategory(String categoryName) {
-        return menuItemDAO.getMenuItemsByCategory(categoryName);
+    public List<MenuItem> getMenuItemsByCategory(int categoryId) {
+        return menuItemDAO.getMenuItemsByCategory(categoryId);
     }
 
     public List<MenuItem> getAllMenuItems() {
@@ -50,66 +63,74 @@ public class RestaurantController {
         return ingredientDAO.getAllIngredients();
     }
 
-    // ===== Order Operations =====
-    public void startNewOrder(String serviceType) {
-        OrderBuilder builder = new OrderBuilder();
-        builder.setServiceType(serviceType);
-        this.currentOrder = builder.build();
-        System.out.println("🆕 Yeni sipariş başlatıldı: " + currentOrder.getOrderId());
+    public List<Ingredient> getIngredientsForMenuItem(int menuItemId) {
+        return ingredientDAO.getIngredientsForMenuItem(menuItemId);
     }
 
-    public void addItemToCurrentOrder(MenuItem menuItem, int quantity) {
-        if (currentOrder == null) {
-            startNewOrder("dine-in");
+    // ===== Order Operations =====
+    public void startNewOrder(Order.OrderType orderType) {
+        this.currentOrderBuilder = new OrderBuilder(orderType);
+    }
+
+    public void addItemToCurrentOrder(OrderItem item) {
+        if (currentOrderBuilder == null) {
+            startNewOrder(Order.OrderType.DINE_IN);
         }
-        OrderItem item = new OrderItem(menuItem, quantity);
-        currentOrder.addItem(item);
-        System.out.println("➕ Sepete eklendi: " + menuItem.getName() + " x" + quantity);
+        currentOrderBuilder.addItem(item);
     }
 
     public Order getCurrentOrder() {
-        return currentOrder;
+        if (currentOrderBuilder == null) {
+            return null;
+        }
+        return currentOrderBuilder.getOrder();
     }
 
     public double getCurrentOrderTotal() {
-        if (currentOrder == null) {
+        if (currentOrderBuilder == null) {
             return 0.0;
         }
-        return pricingStrategy.calculatePrice(currentOrder);
+        Order order = currentOrderBuilder.getOrder();
+        return pricingStrategy.calculatePrice(order);
     }
 
     public boolean completeOrder() {
-        if (currentOrder == null || currentOrder.getItems().isEmpty()) {
-            System.err.println("❌ Sipariş boş!");
+        if (currentOrderBuilder == null) {
             return false;
         }
 
-        boolean saved = orderDAO.saveOrder(currentOrder);
+        try {
+            Order order = currentOrderBuilder.build();
+            boolean saved = orderDAO.saveOrder(order);
 
-        if (saved) {
-            orderSubject.notifyOrderPlaced(currentOrder);
-            currentOrder = null; // Reset for next order
-            return true;
+            if (saved) {
+                orderSubject.notifyOrderPlaced(order);
+                currentOrderBuilder = null; // Reset for next order
+                return true;
+            }
+            return false;
+
+        } catch (IllegalStateException e) {
+            System.err.println("Sipariş tamamlanamadı: " + e.getMessage());
+            return false;
         }
-        return false;
     }
 
     public void cancelCurrentOrder() {
-        currentOrder = null;
-        System.out.println("❌ Sipariş iptal edildi");
+        currentOrderBuilder = null;
     }
 
     // ===== Pricing Strategy =====
     public void setPricingStrategy(PricingStrategy strategy) {
         this.pricingStrategy = strategy;
-        System.out.println("💰 Fiyatlandırma değişti: " + strategy.getStrategyName());
     }
 
     public PricingStrategy getPricingStrategy() {
         return pricingStrategy;
     }
 
-    public String getPricingStrategyName() {
-        return pricingStrategy.getStrategyName();
+    // Helper
+    public OrderItem createOrderItem(MenuItem menuItem) {
+        return new OrderItem(menuItem);
     }
 }

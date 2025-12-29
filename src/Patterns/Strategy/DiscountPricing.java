@@ -1,9 +1,9 @@
 package Patterns.Strategy;
 
-
-import OrderMenu.*;
+import Model.Order;
 
 public class DiscountPricing implements PricingStrategy {
+
     private double discountPercentage;
 
     public DiscountPricing(double discountPercentage) {

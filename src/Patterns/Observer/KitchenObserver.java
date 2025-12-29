@@ -1,8 +1,9 @@
 package Patterns.Observer;
 
-import OrderMenu.*;
+import Model.Order;
 
 public class KitchenObserver implements OrderObserver {
+
     private String kitchenName;
 
     public KitchenObserver(String kitchenName) {

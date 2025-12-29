@@ -1,6 +1,6 @@
 package Patterns.Observer;
 
-import OrderMenu.*;
+import Model.Order;
 
 // Observer Interface
 public interface OrderObserver {

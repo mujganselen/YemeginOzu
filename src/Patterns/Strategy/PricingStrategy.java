@@ -1,6 +1,6 @@
 package Patterns.Strategy;
 
-import OrderMenu.*;
+import Model.Order;
 
 // Strategy Interface
 public interface PricingStrategy {

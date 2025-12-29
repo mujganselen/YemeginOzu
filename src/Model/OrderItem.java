@@ -1,50 +1,56 @@
-package OrderMenu;
-import java.util.List;
+package Model;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderItem {
+    private int id;
     private MenuItem menuItem;
     private int quantity;
-    private List<String> addedIngredients;
-    private List<String> removedIngredients;
+    private double unitPrice;
+    private List<Ingredient> addedIngredients;
+    private List<Ingredient> removedIngredients;
+    private String customizationNote;
 
-    public OrderItem(MenuItem menuItem, int quantity) {
+    public OrderItem(MenuItem menuItem) {
         this.menuItem = menuItem;
-        this.quantity = quantity;
+        this.quantity = 1;
+        this.unitPrice = menuItem.getBasePrice();
         this.addedIngredients = new ArrayList<>();
         this.removedIngredients = new ArrayList<>();
     }
 
+    public double getTotalPrice() {
+        double total = unitPrice * quantity;
+        for (Ingredient ing : addedIngredients) {
+            total += ing.getExtraPrice() * quantity;
+        }
+        return total;
+    }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
     public MenuItem getMenuItem() { return menuItem; }
+    public void setMenuItem(MenuItem menuItem) { this.menuItem = menuItem; }
+
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
-    public List<String> getAddedIngredients() { return addedIngredients; }
-    public List<String> getRemovedIngredients() { return removedIngredients; }
+    public void incrementQuantity() { this.quantity++; }
+    public void decrementQuantity() { if (this.quantity > 1) this.quantity--; }
 
-    public void addIngredient(String ingredient) {
-        addedIngredients.add(ingredient);
+    public double getUnitPrice() { return unitPrice; }
+    public void setUnitPrice(double unitPrice) { this.unitPrice = unitPrice; }
+
+    public List<Ingredient> getAddedIngredients() { return addedIngredients; }
+    public void addIngredient(Ingredient ingredient) {
+        this.addedIngredients.add(ingredient);
     }
 
-    public void removeIngredient(String ingredient) {
-        removedIngredients.add(ingredient);
+    public List<Ingredient> getRemovedIngredients() { return removedIngredients; }
+    public void removeIngredient(Ingredient ingredient) {
+        this.removedIngredients.add(ingredient);
     }
 
-    public double getTotalPrice() {
-        double price = menuItem.getBasePrice() * quantity;
-        price += addedIngredients.size() * 20.0;
-        return price;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(menuItem.getName()).append(" x").append(quantity);
-        if (!addedIngredients.isEmpty()) {
-            sb.append(" [+").append(String.join(", ", addedIngredients)).append("]");
-        }
-        if (!removedIngredients.isEmpty()) {
-            sb.append(" [-").append(String.join(", ", removedIngredients)).append("]");
-        }
-        return sb.toString();
-    }
+    public String getCustomizationNote() { return customizationNote; }
+    public void setCustomizationNote(String note) { this.customizationNote = note; }
 }

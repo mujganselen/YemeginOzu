@@ -1,8 +1,9 @@
 package Patterns.Strategy;
 
-import OrderMenu.*;
+import Model.Order;
 
 public class RegularPricing implements PricingStrategy {
+
     @Override
     public double calculatePrice(Order order) {
         return order.getTotalPrice();

@@ -1,33 +1,41 @@
-
 package Controller;
 
-import OrderMenu.*;
+import Model.Order;
+import Model.OrderItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderController {
-    private List<OrderItem> cart;
+
+    private final List<OrderItem> cart;
+    private Order currentOrder;
 
     public OrderController() {
         this.cart = new ArrayList<>();
     }
 
+    public void createNewOrder(Order.OrderType orderType) {
+        this.currentOrder = new Order(orderType);
+        this.cart.clear();
+    }
+
+    public Order getCurrentOrder() {
+        return currentOrder;
+    }
+
     public void addToCart(OrderItem item) {
-        // Check if same item exists
         for (OrderItem existing : cart) {
-            if (existing.getMenuItem().getName().equals(item.getMenuItem().getName())) {
+            if (existing.getMenuItem().getId() == item.getMenuItem().getId()) {
                 existing.setQuantity(existing.getQuantity() + item.getQuantity());
-                System.out.println("🔄 Miktar güncellendi: " + item.getMenuItem().getName());
                 return;
             }
         }
         cart.add(item);
-        System.out.println("🛒 Sepete eklendi: " + item);
     }
 
     public void removeFromCart(OrderItem item) {
         cart.remove(item);
-        System.out.println("🗑️ Sepetten çıkarıldı: " + item.getMenuItem().getName());
     }
 
     public void updateItemQuantity(OrderItem item, int quantity) {
@@ -35,7 +43,6 @@ public class OrderController {
             removeFromCart(item);
         } else {
             item.setQuantity(quantity);
-            System.out.println("🔢 Miktar güncellendi: " + quantity);
         }
     }
 
@@ -57,29 +64,9 @@ public class OrderController {
 
     public void clearCart() {
         cart.clear();
-        System.out.println("🧹 Sepet temizlendi");
     }
 
     public boolean isCartEmpty() {
         return cart.isEmpty();
-    }
-
-    public Order buildOrderFromCart(String serviceType) {
-        OrderBuilder builder = new OrderBuilder();
-        builder.setServiceType(serviceType);
-
-        for (OrderItem item : cart) {
-            builder.addMenuItem(item.getMenuItem(), item.getQuantity());
-
-            // Add customizations
-            for (String ing : item.getAddedIngredients()) {
-                builder.addIngredient(ing);
-            }
-            for (String ing : item.getRemovedIngredients()) {
-                builder.removeIngredient(ing);
-            }
-        }
-
-        return builder.build();
     }
 }

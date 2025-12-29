@@ -1,9 +1,10 @@
 package Patterns.Strategy;
 
-import OrderMenu.*;
+import Model.Order;
 import java.time.LocalTime;
 
 public class HappyHourPricing implements PricingStrategy {
+
     private static final LocalTime HAPPY_HOUR_START = LocalTime.of(14, 0);
     private static final LocalTime HAPPY_HOUR_END = LocalTime.of(17, 0);
     private static final double DISCOUNT = 20.0;
