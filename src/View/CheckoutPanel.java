@@ -218,27 +218,64 @@ public class CheckoutPanel extends JPanel {
     }
 
 
-
     private void completePayment() {
-        boolean success = mainFrame.getRestaurantController().completeOrder();
+        try {
+            // 1) Sepeti al
+            List<OrderItem> cart = mainFrame.getOrderController().getCart();
 
-        if (success) {
-            JOptionPane.showMessageDialog(this,
-                    "✓ Your order has been placed successfully!\n" +
-                            "It has been sent to the kitchen.\n" +
-                            "Order No: " + mainFrame.getRestaurantController()
-                            .getCurrentOrder().getOrderNumber(),
-                    "Order Completed",
-                    JOptionPane.INFORMATION_MESSAGE);
+            if (cart == null || cart.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "Your cart is empty! Please add items.",
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
-            mainFrame.getOrderController().clearCart();
-            mainFrame.showPanel("WELCOME");
-        } else {
+            // 2) Sipariş tipini doğru yerden al (OrderController)
+            Order.OrderType orderType = mainFrame.getOrderController().getCurrentOrderType();
+
+            // 3) RestaurantController içindeki Builder'ı sepete göre yeniden kur
+            mainFrame.getRestaurantController().rebuildCurrentOrder(cart, orderType);
+
+            // 4) Seçili pricing strategy ile final fiyatı hesapla
+            double finalPrice = mainFrame.getRestaurantController().getCurrentOrderTotal();
+
+            // 5) Siparişi kaydet + mutfağa bildir (Observer) -> parametresiz completeOrder()
+            boolean success = mainFrame.getRestaurantController().completeOrder();
+
+            if (success) {
+                // Builder build edildiği için orderNumber vs. almak istiyorsan:
+                // Order order = mainFrame.getRestaurantController().getCurrentOrder();
+                // Ancak completeOrder() sonunda builder null'a çekiliyor.
+                // Bu yüzden mesajda en güvenlisi finalPrice üzerinden gitmek.
+
+                JOptionPane.showMessageDialog(this,
+                        "✓ Siparişiniz başarıyla alındı!\n" +
+                                "Mutfağa iletildi.\n" +
+                                "Toplam: " + String.format("%.2f TL", finalPrice),
+                        "Sipariş Tamamlandı",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                // 6) Sepeti temizle ve başa dön
+                mainFrame.getOrderController().clearCart();
+                mainFrame.showPanel("WELCOME");
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Sipariş kaydedilemedi. Lütfen tekrar deneyin.",
+                        "Hata",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
+        } catch (Exception e) {
+            System.err.println("Payment error: " + e.getMessage());
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this,
-                    "The order could not be saved. Please try again.",
-                    "Error",
+                    "Hata: " + e.getMessage(),
+                    "Hata",
                     JOptionPane.ERROR_MESSAGE);
         }
-
     }
+
+
+
 }

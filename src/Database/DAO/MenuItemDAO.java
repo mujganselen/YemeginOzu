@@ -1,5 +1,4 @@
 package Database.DAO;
-
 import Database.DatabaseConnection;
 import Model.Category;
 import Model.MenuItem;

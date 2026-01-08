@@ -1,6 +1,6 @@
 package Database.DAO;
-
 import Database.DatabaseConnection;
+
 import Model.*;
 
 import java.sql.*;

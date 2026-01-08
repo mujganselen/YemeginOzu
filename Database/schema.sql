@@ -1,9 +1,6 @@
--- YemeğinÖzü Restaurant Management System Database Schema
-
 CREATE DATABASE IF NOT EXISTS yemeginozu_db;
 USE yemeginozu_db;
 
--- Categories table (Yemek Kategorileri)
 CREATE TABLE categories (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -12,7 +9,6 @@ CREATE TABLE categories (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Menu Items table (Yemekler)
 CREATE TABLE menu_items (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(150) NOT NULL,
@@ -25,7 +21,6 @@ CREATE TABLE menu_items (
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
 
--- Ingredients table (Malzemeler)
 CREATE TABLE ingredients (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -34,7 +29,6 @@ CREATE TABLE ingredients (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Menu Item Ingredients (Yemeklerin malzemeleri)
 CREATE TABLE menu_item_ingredients (
     menu_item_id INT NOT NULL,
     ingredient_id INT NOT NULL,
@@ -44,7 +38,6 @@ CREATE TABLE menu_item_ingredients (
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(id) ON DELETE CASCADE
 );
 
--- Orders table (Siparişler)
 CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
     order_number VARCHAR(50) UNIQUE NOT NULL,
@@ -55,7 +48,6 @@ CREATE TABLE orders (
     completed_at TIMESTAMP NULL
 );
 
--- Order Items table (Sipariş kalemleri)
 CREATE TABLE order_items (
     id INT PRIMARY KEY AUTO_INCREMENT,
     order_id INT NOT NULL,
@@ -67,7 +59,6 @@ CREATE TABLE order_items (
     FOREIGN KEY (menu_item_id) REFERENCES menu_items(id)
 );
 
--- Order Item Customizations (Sipariş özelleştirmeleri)
 CREATE TABLE order_item_customizations (
     id INT PRIMARY KEY AUTO_INCREMENT,
     order_item_id INT NOT NULL,
@@ -77,7 +68,6 @@ CREATE TABLE order_item_customizations (
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
 );
 
--- Sample Data İnsert
 INSERT INTO categories (name, description, display_order) VALUES
 ('Ana Yemekler', 'Lezzetli ana yemek seçeneklerimiz', 1),
 ('Başlangıçlar', 'Yemeğe başlamadan önce atıştırmalıklar', 2),

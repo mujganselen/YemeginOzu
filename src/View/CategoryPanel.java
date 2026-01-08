@@ -18,11 +18,9 @@ public class CategoryPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // Header
         JPanel headerPanel = createHeaderPanel();
         add(headerPanel, BorderLayout.NORTH);
 
-        // Category Grid
         categoryContainer = new JPanel();
         categoryContainer.setLayout(new GridLayout(0, 2, 20, 20));
         categoryContainer.setBackground(Color.WHITE);
@@ -32,7 +30,6 @@ public class CategoryPanel extends JPanel {
         scrollPane.setBorder(null);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Bottom panel with cart button
         JPanel bottomPanel = createBottomPanel();
         add(bottomPanel, BorderLayout.SOUTH);
     }
@@ -42,7 +39,7 @@ public class CategoryPanel extends JPanel {
         panel.setBackground(new Color(255, 140, 0));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JLabel titleLabel = new JLabel("Categories");
+        JLabel titleLabel = new JLabel("🍴 Kategoriler");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
         titleLabel.setForeground(Color.WHITE);
 
@@ -55,7 +52,7 @@ public class CategoryPanel extends JPanel {
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        JButton cartButton = new JButton("View Cart (" +
+        JButton cartButton = new JButton("🛒 Sepete Git (" +
                 mainFrame.getOrderController().getCartItemCount() + ")");
         cartButton.setFont(new Font("Arial", Font.BOLD, 18));
         cartButton.setPreferredSize(new Dimension(200, 50));
@@ -70,17 +67,41 @@ public class CategoryPanel extends JPanel {
     }
 
     public void loadCategories() {
+        System.out.println("🔍 CategoryPanel: loadCategories() çağrıldı");
         categoryContainer.removeAll();
 
-        List<Category> categories = mainFrame.getRestaurantController().getAllCategories();
+        try {
+            List<Category> categories = mainFrame.getRestaurantController().getAllCategories();
+            System.out.println("📊 Yüklenen kategori sayısı: " + categories.size());
 
-        for (Category category : categories) {
-            JButton categoryButton = createCategoryButton(category);
-            categoryContainer.add(categoryButton);
+            if (categories.isEmpty()) {
+                System.err.println("⚠️ Kategori listesi BOŞ!");
+                showErrorMessage("Kategori bulunamadı!");
+                return;
+            }
+
+            for (Category category : categories) {
+                System.out.println("  - " + category.getName());
+                JButton categoryButton = createCategoryButton(category);
+                categoryContainer.add(categoryButton);
+            }
+
+        } catch (Exception e) {
+            System.err.println("❌ Kategori yükleme hatası: " + e.getMessage());
+            e.printStackTrace();
+            showErrorMessage("Kategoriler yüklenemedi: " + e.getMessage());
         }
 
         categoryContainer.revalidate();
         categoryContainer.repaint();
+    }
+
+    private void showErrorMessage(String message) {
+        JLabel errorLabel = new JLabel(message);
+        errorLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        categoryContainer.add(errorLabel);
     }
 
     private JButton createCategoryButton(Category category) {
@@ -92,7 +113,6 @@ public class CategoryPanel extends JPanel {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
 
-        // Icon based on category
         String icon = getCategoryIcon(category.getName());
         JLabel iconLabel = new JLabel(icon, SwingConstants.CENTER);
         iconLabel.setFont(new Font("Arial", Font.PLAIN, 50));
@@ -112,9 +132,11 @@ public class CategoryPanel extends JPanel {
 
         button.add(textPanel, BorderLayout.CENTER);
 
-        button.addActionListener(e -> mainFrame.showMenu(category.getId()));
+        button.addActionListener(e -> {
+            System.out.println("🖱️ Kategori tıklandı: " + category.getName() + " (ID: " + category.getId() + ")");
+            mainFrame.showMenu(category.getId());
+        });
 
-        // Hover effect
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(255, 235, 205));
@@ -128,10 +150,10 @@ public class CategoryPanel extends JPanel {
     }
 
     private String getCategoryIcon(String categoryName) {
-        if (categoryName.contains("Main")) return "🍖";
-        if (categoryName.contains("Starter")) return "🥗";
-        if (categoryName.contains("Dessert")) return "🍰";
-        if (categoryName.contains("Drink")) return "🥤";
+        if (categoryName.contains("Ana")) return "🍖";
+        if (categoryName.contains("Başlangıç")) return "🥗";
+        if (categoryName.contains("Tatlı")) return "🍰";
+        if (categoryName.contains("İçecek")) return "🥤";
         return "🍽️";
     }
 }

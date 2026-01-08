@@ -1,6 +1,6 @@
 package Database.DAO;
-
 import Database.DatabaseConnection;
+
 import Model.Ingredient;
 import java.sql.*;
 import java.util.ArrayList;
