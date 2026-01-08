@@ -50,12 +50,11 @@ public class RestaurantController {
     }
 
 
-    // ===== Category Operations =====
     public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();
     }
 
-    // ===== Menu Operations =====
+
     public List<MenuItem> getMenuItemsByCategory(int categoryId) {
         return menuItemDAO.getMenuItemsByCategory(categoryId);
     }
@@ -141,7 +140,7 @@ public class RestaurantController {
         return pricingStrategy;
     }
 
-    // Helper
+    // Helper method
     public OrderItem createOrderItem(MenuItem menuItem) {
         return new OrderItem(menuItem);
     }

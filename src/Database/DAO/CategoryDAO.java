@@ -1,4 +1,3 @@
-// src/Database/DAO/CategoryDAO.java
 package Database.DAO;
 import Database.DatabaseConnection;
 

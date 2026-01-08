@@ -44,7 +44,7 @@ public class CartPanel extends JPanel {
         panel.setBackground(new Color(34, 139, 34));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        JButton backButton = new JButton("◀ Continue Shopping");
+        JButton backButton = new JButton(" Continue Shopping");
         backButton.setFont(new Font("Arial", Font.BOLD, 16));
         backButton.setBackground(new Color(46, 160, 46));
         backButton.setForeground(Color.WHITE);

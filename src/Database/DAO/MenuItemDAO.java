@@ -65,7 +65,7 @@ public class MenuItemDAO {
         item.setAvailable(rs.getBoolean("is_available"));
         item.setImagePath(rs.getString("image_path"));
 
-        // Load default ingredients
+        // load default ingredients here
         item.setDefaultIngredients(ingredientDAO.getIngredientsForMenuItem(item.getId()));
 
         return item;
