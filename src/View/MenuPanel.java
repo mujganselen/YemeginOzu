@@ -52,7 +52,7 @@ public class MenuPanel extends JPanel {
         backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backButton.addActionListener(e -> mainFrame.backToCategories());
 
-        JLabel titleLabel = new JLabel("🍽️ Menü");
+        JLabel titleLabel = new JLabel(" Menu ");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
         titleLabel.setForeground(Color.WHITE);
 

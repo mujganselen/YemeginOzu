@@ -16,6 +16,9 @@ public class CheckoutPanel extends JPanel {
     private JComboBox<String> pricingCombo;
 
     private PricingStrategy currentStrategy;
+    private static final String COUPON_10 = "SAVE10";
+    private static final String COUPON_20 = "SAVE20";
+
 
     public CheckoutPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
@@ -171,19 +174,66 @@ public class CheckoutPanel extends JPanel {
         orderSummaryPanel.repaint();
     }
 
+    private boolean askCouponAndValidate(String expectedCoupon, String discountLabel) {
+        String input = JOptionPane.showInputDialog(
+                this,
+                "Enter coupon code for " + discountLabel + ":",
+                "Coupon Required",
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (input == null) { // user pressed cancel
+            return false;
+        }
+
+        input = input.trim();
+
+        return input.equalsIgnoreCase(expectedCoupon);
+    }
+
+
     private void updatePricing() {
         String selected = (String) pricingCombo.getSelectedItem();
 
         switch (selected) {
-            case "10% Discount":
-                currentStrategy = new DiscountPricing(10);
+            case "10% Discount": {
+                boolean ok = askCouponAndValidate(COUPON_10, "10% Discount");
+                if (ok) {
+                    currentStrategy = new DiscountPricing(10);
+                } else {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Invalid coupon code. Discount was not applied.",
+                            "Coupon Error",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                    pricingCombo.setSelectedItem("Regular Price");
+                    currentStrategy = new RegularPricing();
+                }
                 break;
-            case "20% Discount":
-                currentStrategy = new DiscountPricing(20);
+            }
+
+            case "20% Discount": {
+                boolean ok = askCouponAndValidate(COUPON_20, "20% Discount");
+                if (ok) {
+                    currentStrategy = new DiscountPricing(20);
+                } else {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Invalid coupon code. Discount was not applied.",
+                            "Coupon Error",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                    pricingCombo.setSelectedItem("Regular Price");
+                    currentStrategy = new RegularPricing();
+                }
                 break;
+            }
+
             case "Happy Hour (14:00–17:00)":
                 currentStrategy = new HappyHourPricing();
                 break;
+
             default:
                 currentStrategy = new RegularPricing();
         }
@@ -191,6 +241,7 @@ public class CheckoutPanel extends JPanel {
         mainFrame.getRestaurantController().setPricingStrategy(currentStrategy);
         updateTotals();
     }
+
 
     private void updateTotals() {
         List<OrderItem> cartItems = mainFrame.getOrderController().getCart();
@@ -218,6 +269,7 @@ public class CheckoutPanel extends JPanel {
     }
 
 
+    // biraz karışık oldu
     private void completePayment() {
         try {
             // 1) Sepeti al
@@ -244,25 +296,23 @@ public class CheckoutPanel extends JPanel {
             boolean success = mainFrame.getRestaurantController().completeOrder();
 
             if (success) {
-                // Builder build edildiği için orderNumber vs. almak istiyorsan:
-                // Order order = mainFrame.getRestaurantController().getCurrentOrder();
-                // Ancak completeOrder() sonunda builder null'a çekiliyor.
-                // Bu yüzden mesajda en güvenlisi finalPrice üzerinden gitmek.
+                Order savedOrder = mainFrame.getRestaurantController().getLastCompletedOrder();
+                String orderNo = (savedOrder != null) ? savedOrder.getOrderNumber() : "N/A";
 
                 JOptionPane.showMessageDialog(this,
-                        "✓ Siparişiniz başarıyla alındı!\n" +
-                                "Mutfağa iletildi.\n" +
-                                "Toplam: " + String.format("%.2f TL", finalPrice),
-                        "Sipariş Tamamlandı",
+                        "✓ Your order has been placed successfully!\n" +
+                                "Sent to the kitchen.\n" +
+                                "Order No: " + orderNo + "\n" +
+                                "Total: " + String.format("%.2f TL", finalPrice),
+                        "Order Completed",
                         JOptionPane.INFORMATION_MESSAGE);
 
-                // 6) Sepeti temizle ve başa dön
                 mainFrame.getOrderController().clearCart();
                 mainFrame.showPanel("WELCOME");
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "Sipariş kaydedilemedi. Lütfen tekrar deneyin.",
-                        "Hata",
+                        "Order could not be saved. Please try again.",
+                        "Error :( ",
                         JOptionPane.ERROR_MESSAGE);
             }
 

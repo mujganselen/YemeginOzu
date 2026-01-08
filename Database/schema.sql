@@ -1,6 +1,10 @@
-CREATE DATABASE IF NOT EXISTS yemeginozu_db;
+-- RESET + CREATE + SEED (tek seferde çalıştır)
+
+DROP DATABASE IF EXISTS yemeginozu_db;
+CREATE DATABASE yemeginozu_db;
 USE yemeginozu_db;
 
+-- Categories table
 CREATE TABLE categories (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -9,6 +13,7 @@ CREATE TABLE categories (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Menu Items table
 CREATE TABLE menu_items (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(150) NOT NULL,
@@ -21,6 +26,7 @@ CREATE TABLE menu_items (
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
 );
 
+-- Ingredients table
 CREATE TABLE ingredients (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -29,6 +35,7 @@ CREATE TABLE ingredients (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Menu Item Ingredients
 CREATE TABLE menu_item_ingredients (
     menu_item_id INT NOT NULL,
     ingredient_id INT NOT NULL,
@@ -38,6 +45,7 @@ CREATE TABLE menu_item_ingredients (
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(id) ON DELETE CASCADE
 );
 
+-- Orders table
 CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
     order_number VARCHAR(50) UNIQUE NOT NULL,
@@ -48,6 +56,7 @@ CREATE TABLE orders (
     completed_at TIMESTAMP NULL
 );
 
+-- Order Items table
 CREATE TABLE order_items (
     id INT PRIMARY KEY AUTO_INCREMENT,
     order_id INT NOT NULL,
@@ -59,6 +68,7 @@ CREATE TABLE order_items (
     FOREIGN KEY (menu_item_id) REFERENCES menu_items(id)
 );
 
+-- Order Item Customizations
 CREATE TABLE order_item_customizations (
     id INT PRIMARY KEY AUTO_INCREMENT,
     order_item_id INT NOT NULL,
@@ -68,36 +78,65 @@ CREATE TABLE order_item_customizations (
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
 );
 
+-- Seed categories
 INSERT INTO categories (name, description, display_order) VALUES
-('Ana Yemekler', 'Lezzetli ana yemek seçeneklerimiz', 1),
-('Başlangıçlar', 'Yemeğe başlamadan önce atıştırmalıklar', 2),
-('Tatlılar', 'Tatlı seçeneklerimiz', 3),
-('İçecekler', 'Soğuk ve sıcak içecekler', 4);
+('Main Dishes', 'Our signature main course options', 1),
+('Starters', 'Light bites to begin your meal', 2),
+('Desserts', 'Sweet dessert selections', 3),
+('Drinks', 'Cold and hot beverages', 4);
 
+-- Seed ingredients
 INSERT INTO ingredients (name, extra_price, is_removable) VALUES
-('Domates', 0.00, TRUE),
-('Soğan', 0.00, TRUE),
-('Biber', 0.00, TRUE),
-('Marul', 0.00, TRUE),
-('Peynir', 5.00, TRUE),
-('Zeytin', 3.00, TRUE),
-('Mantar', 7.00, TRUE),
-('Acı Sos', 0.00, TRUE),
-('Ranch Sos', 2.00, TRUE),
-('BBQ Sos', 2.00, TRUE);
+('Ketchup', 0.00, TRUE),
+('Mayonnaise', 0.00, TRUE),
+('Tomato', 0.00, TRUE),
+('Onion', 0.00, TRUE),
+('Pepper', 0.00, TRUE),
+('Lettuce', 0.00, TRUE),
+('Cheese', 5.00, TRUE),
+('Olives', 3.00, TRUE),
+('Mushrooms', 7.00, TRUE),
+('Hot Sauce', 0.00, TRUE),
+('Ranch Sauce', 2.00, TRUE),
+('BBQ Sauce', 2.00, TRUE);
 
+-- Seed menu_items (ilk 10 aynı sırada)
 INSERT INTO menu_items (name, description, base_price, category_id) VALUES
-('Izgara Tavuk', 'Özel baharatlarla marine edilmiş ızgara tavuk', 85.00, 1),
-('Köfte', 'El yapımı köfte', 95.00, 1),
-('Pizza Margherita', 'Klasik İtalyan pizzası', 120.00, 1),
-('Patates Kızartması', 'Çıtır çıtır patates', 35.00, 2),
-('Soğan Halkası', 'Paneli soğan halkası', 40.00, 2),
-('Sezar Salata', 'Taze marul ve kruton', 55.00, 2),
-('Baklava', 'Antep fıstıklı baklava', 60.00, 3),
-('Sütlaç', 'Fırın sütlaç', 45.00, 3),
-('Kola', 'Soğuk kola', 15.00, 4),
-('Ayran', 'Soğuk ayran', 10.00, 4);
+('Grilled Chicken', 'Grilled chicken marinated with special spices', 85.00, 1),
+('Meatballs (Köfte)', 'Handmade Turkish meatballs', 95.00, 1),
+('Pizza Margherita', 'Classic Italian pizza with tomato sauce and mozzarella', 120.00, 1),
+('French Fries', 'Crispy golden fries', 35.00, 2),
+('Onion Rings', 'Crispy battered onion rings', 40.00, 2),
+('Caesar Salad', 'Fresh lettuce with croutons and Caesar dressing', 55.00, 2),
+('Baklava', 'Traditional layered pastry with pistachio', 60.00, 3),
+('Rice Pudding (Sütlaç)', 'Baked Turkish rice pudding', 45.00, 3),
+('Cola', 'Chilled cola', 15.00, 4),
+('Ayran', 'Cold yogurt-based Turkish drink', 10.00, 4);
 
+-- Yeni Main Dishes
+INSERT INTO menu_items (name, description, base_price, category_id) VALUES
+('Bursa Iskender', 'Doner meat over bread with tomato sauce and butter', 165.00, 1),
+('Grilled Köfte', 'Grilled Turkish meatballs served with garnish', 135.00, 1),
+('Cokertme Kebab', 'Beef over crispy potatoes with yogurt sauce', 175.00, 1),
+('Eggplant Kebab', 'Kebab prepared with roasted eggplant and meat', 170.00, 1),
+('Beyti Kebab', 'Wrapped kebab served with yogurt and tomato sauce', 180.00, 1),
+('Kofte over Eggplant Puree (Beğendili Köfte)', 'Meatballs on smoked eggplant puree', 155.00, 1);
+
+-- Yeni Desserts
+INSERT INTO menu_items (name, description, base_price, category_id) VALUES
+('Trilece', 'Sponge cake soaked in three-milk syrup', 65.00, 3),
+('Bread Pudding with Kaymak (Ekmek Kadayıfı)', 'Traditional bread dessert served with kaymak', 75.00, 3),
+('Profiterole', 'Choux pastry filled with cream and chocolate sauce', 70.00, 3),
+('Tulumba', 'Fried dough dessert soaked in syrup', 55.00, 3),
+('Supangle', 'Chocolate pudding dessert', 60.00, 3),
+('Chocolate Souffle (Sufle)', 'Warm chocolate souffle', 80.00, 3);
+
+-- Yeni Drinks
+INSERT INTO menu_items (name, description, base_price, category_id) VALUES
+('Ice Tea', 'Chilled iced tea', 18.00, 4),
+('Tea', 'Hot black tea', 12.00, 4);
+
+-- Seed menu_item_ingredients
 INSERT INTO menu_item_ingredients (menu_item_id, ingredient_id, is_default) VALUES
 (1, 1, TRUE), (1, 2, TRUE), (1, 3, TRUE),
 (2, 1, TRUE), (2, 2, TRUE),

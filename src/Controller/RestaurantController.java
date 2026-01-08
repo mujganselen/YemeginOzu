@@ -25,6 +25,7 @@ public class RestaurantController {
     private final MenuItemDAO menuItemDAO;
     private final IngredientDAO ingredientDAO;
     private final OrderDAO orderDAO;
+    private Order lastCompletedOrder;
 
     private OrderBuilder currentOrderBuilder;
     private final OrderSubject orderSubject;
@@ -43,6 +44,11 @@ public class RestaurantController {
         // Default pricing strategy
         this.pricingStrategy = new RegularPricing();
     }
+
+    public Order getLastCompletedOrder() {
+        return lastCompletedOrder;
+    }
+
 
     // ===== Category Operations =====
     public List<Category> getAllCategories() {
@@ -110,6 +116,7 @@ public class RestaurantController {
             boolean saved = orderDAO.saveOrder(order);
 
             if (saved) {
+                this.lastCompletedOrder = order;
                 orderSubject.notifyOrderPlaced(order);
                 currentOrderBuilder = null; // Reset for next order
                 return true;
@@ -117,7 +124,7 @@ public class RestaurantController {
             return false;
 
         } catch (IllegalStateException e) {
-            System.err.println("Sipariş tamamlanamadı: " + e.getMessage());
+            System.err.println("Order could not be completed: " + e.getMessage());
             return false;
         }
     }
